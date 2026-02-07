@@ -1,13 +1,14 @@
-import { dateIdeas } from '@/lib/data';
-import type { DateFilters, DateIdea } from '@/types/date';
+import { getDateIdeas } from '@/lib/data';
+import type { DateFilters, DateIdea, Language } from '@/types/date';
 
 const randomPick = <T>(items: T[]): T => {
   const index = Math.floor(Math.random() * items.length);
   return items[index];
 };
 
-export const generateDateIdea = (filters: DateFilters): DateIdea => {
-  const strictMatches = dateIdeas.filter(
+export const generateDateIdea = (filters: DateFilters, language: Language): DateIdea => {
+  const ideas = getDateIdeas(language);
+  const strictMatches = ideas.filter(
     (idea) =>
       idea.mood === filters.mood &&
       idea.budget === filters.budget &&
@@ -16,38 +17,49 @@ export const generateDateIdea = (filters: DateFilters): DateIdea => {
   );
 
   if (strictMatches.length > 0) {
-    return withSurprise(strictMatches, filters.surpriseMode);
+    return withSurprise(strictMatches, filters.surpriseMode, language);
   }
 
-  const closeMatches = dateIdeas.filter(
+  const closeMatches = ideas.filter(
     (idea) => idea.mood === filters.mood && idea.setting === filters.setting
   );
 
   if (closeMatches.length > 0) {
-    return withSurprise(closeMatches, filters.surpriseMode);
+    return withSurprise(closeMatches, filters.surpriseMode, language);
   }
 
-  return withSurprise(dateIdeas, filters.surpriseMode);
+  return withSurprise(ideas, filters.surpriseMode, language);
 };
 
-const withSurprise = (pool: DateIdea[], surpriseMode: boolean): DateIdea => {
+const withSurprise = (pool: DateIdea[], surpriseMode: boolean, language: Language): DateIdea => {
   const idea = randomPick(pool);
 
   if (!surpriseMode) {
     return idea;
   }
 
+  const bonusText =
+    language === 'zh'
+      ? '附加小彩蛋：写下一句“今晚我最感谢你的是……”。'
+      : 'Bonus twist: add a short note that starts with "Tonight I appreciate...".';
+
   return {
     ...idea,
-    surpriseIdea: `${idea.surpriseIdea} Bonus twist: add a short note that starts with "Tonight I appreciate...".`
+    surpriseIdea: `${idea.surpriseIdea} ${bonusText}`
   };
 };
 
-export const serializeIdeaForSharing = (idea: DateIdea): string => {
-  return [
-    `DateCraft plan: ${idea.title}`,
-    idea.summary,
-    `Plan: ${idea.detailedPlan}`,
-    `Surprise: ${idea.surpriseIdea}`
-  ].join('\n');
+export const serializeIdeaForSharing = (idea: DateIdea, language: Language): string => {
+  if (language === 'zh') {
+    return [
+      `DateCraft 约会方案：${idea.title}`,
+      idea.summary,
+      `计划：${idea.detailedPlan}`,
+      `惊喜：${idea.surpriseIdea}`
+    ].join('\n');
+  }
+
+  return [`DateCraft plan: ${idea.title}`, idea.summary, `Plan: ${idea.detailedPlan}`, `Surprise: ${idea.surpriseIdea}`].join(
+    '\n'
+  );
 };

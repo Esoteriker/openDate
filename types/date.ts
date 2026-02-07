@@ -6,6 +6,8 @@ export type Mood =
   | 'chill'
   | 'creative';
 
+export type Language = 'en' | 'zh';
+
 export type Budget = 'low' | 'medium' | 'high';
 export type TimeAvailable = '1 hour' | 'half day' | 'full day';
 export type Setting = 'indoor' | 'outdoor';

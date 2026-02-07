@@ -1,11 +1,6 @@
 import type { Metadata } from 'next';
-import { Plus_Jakarta_Sans } from 'next/font/google';
+import LanguageProvider from '@/components/providers/LanguageProvider';
 import './globals.css';
-
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  variable: '--font-jakarta'
-});
 
 export const metadata: Metadata = {
   title: 'DateCraft - AI-Powered Date Idea Generator',
@@ -20,7 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${jakarta.className} antialiased`}>{children}</body>
+      <body className="antialiased">
+        <LanguageProvider>{children}</LanguageProvider>
+      </body>
     </html>
   );
 }
