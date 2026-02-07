@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --page-bg: #f8f3ec;
+  --text-main: #2b2433;
+  --surface: rgba(255, 255, 255, 0.78);
+  --surface-border: rgba(255, 255, 255, 0.9);
+  --soft-gradient: linear-gradient(120deg, #f2d4dc 0%, #d9ccf0 56%, #c6b9eb 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--page-bg);
+  color: var(--text-main);
+}
+
+body {
+  min-height: 100vh;
+  background-image:
+    radial-gradient(circle at 15% 15%, rgba(250, 193, 186, 0.40), transparent 42%),
+    radial-gradient(circle at 85% 10%, rgba(186, 168, 235, 0.35), transparent 36%),
+    radial-gradient(circle at 30% 70%, rgba(255, 234, 199, 0.45), transparent 45%),
+    linear-gradient(180deg, #f8f3ec 0%, #f7efe7 100%);
+  background-attachment: fixed;
+}
+
+@layer components {
+  .input {
+    @apply w-full rounded-xl border border-white/80 bg-white/75 px-4 py-3 text-sm text-ink outline-none transition focus:border-lavenderDeep/40 focus:bg-white focus:ring-2 focus:ring-lavenderDeep/20;
+  }
+}
+
+.card-surface {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  backdrop-filter: blur(8px);
+}
+
+.cta-glow {
+  background-image: var(--soft-gradient);
+  background-size: 160% 160%;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-position 220ms ease;
+}
+
+.cta-glow:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 40px -24px rgba(61, 33, 83, 0.75);
+  background-position: 100% 30%;
+}
+
+.section-enter {
+  animation: floatIn 0.5s ease-out forwards;
+}
